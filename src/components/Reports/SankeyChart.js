@@ -9,15 +9,16 @@ import clsx from 'clsx';
 import TitleBar from '../common/TitleBar';
 import { setSelectAssignmentCustomers } from '../../actions/patentTrackActions2';
 import { setDashboardScreen, setPatentScreen, setTimelineScreen } from '../../actions/uiActions';
+import useSafeState from '../../hooks/useSafeState'
 
 const SankeyChart = (props) => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(false);
-    const [loadingAssignor, setLoadingAssingor] = useState(false);
-    const [data, setData] = useState([]);
-    const [assignorData, setAssignorData] = useState([]);    
-    const [assigneeRawData, setAssigneeRawData] = useState([]);    
-    const [assignorRawData, setAssignorRawData] = useState([]);    
+    const [loading, setLoading] = useSafeState(false);
+    const [loadingAssignor, setLoadingAssingor] = useSafeState(false);
+    const [data, setData] = useSafeState([]);
+    const [assignorData, setAssignorData] = useSafeState([]);    
+    const [assigneeRawData, setAssigneeRawData] = useSafeState([]);    
+    const [assignorRawData, setAssignorRawData] = useSafeState([]);    
     
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     

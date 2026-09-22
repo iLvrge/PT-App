@@ -206,7 +206,7 @@ const GoogleCharts = ({ chartBar, visualizerBarSize, standalone }) => {
                 selectedTab === 0
                 ?
                     <div className={"flex flex-1 items-center justify-center text-base"} ref={containerRef}>  
-                        <DisplayChart />
+                        {DisplayChart()}
                     </div> 
                 :
                     ''

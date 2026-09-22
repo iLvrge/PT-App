@@ -10,20 +10,21 @@ import FullScreen from '../../FullScreen';
 import LabelWithIcon from '../../LabelWithIcon';
 import TitleBar from '../../TitleBar';
 import { Box } from '@mui/system';
+import useSafeState from '../../../../hooks/useSafeState'
 
 
 const SankeyChart = (props) => {
     const dispatch = useDispatch();
     const containerRef = useRef(null)
-    const [loading, setLoading] = useState(false);
-    const [loadingAssignor, setLoadingAssingor] = useState(false);
+    const [loading, setLoading] = useSafeState(false);
+    const [loadingAssignor, setLoadingAssingor] = useSafeState(false);
     const [ fullScreen, setFullScreen ] = useState(false)
     const [tabs, setTabs] = useState([props.tabText])
     const [data, setData] = useState([]);
     const [height, setHeight] = useState('100%');
     const [assignorData, setAssignorData] = useState([]);    
-    const [assigneeRawData, setAssigneeRawData] = useState([]);    
-    const [assignorRawData, setAssignorRawData] = useState([]);    
+    const [assigneeRawData, setAssigneeRawData] = useSafeState([]);    
+    const [assignorRawData, setAssignorRawData] = useSafeState([]);    
     const selectedCategory = useSelector(state =>  state.patenTrack2.selectedCategory )
     const selectedCompanies = useSelector( state => state.patenTrack2.mainCompaniesList.selected);
     const assetsList = useSelector(state => state.patenTrack2.assetTypeAssignmentAssets.list) //Assets List

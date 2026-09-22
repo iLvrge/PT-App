@@ -188,9 +188,21 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
                     underline={false} 
                     typography={true}
                 />
-                <DisplayChart />
-            </div> 
-        </>  
+                {/*
+                  * Called, not rendered as <DisplayChart />. It is declared
+                  * inside this render, so used as a component it is a *new
+                  * type* on every render: React unmounts the old subtree and
+                  * mounts a fresh one each time. react-google-charts loads the
+                  * chart asynchronously, so a load already in flight came back
+                  * to an unmounted instance - "Can't perform a React state
+                  * update on an unmounted component ... at DisplayChart".
+                  * Calling it yields the same elements while letting React
+                  * reconcile Chart by its own stable type, so the instance
+                  * survives the re-render and the async load lands on it.
+                  */}
+                {DisplayChart()}
+            </div>
+        </>
     )
 }
 

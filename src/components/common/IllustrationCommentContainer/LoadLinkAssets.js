@@ -14,6 +14,7 @@ import {
     linkWithSheetOpenPanel,
     linkWithSheetSelectedAsset
   } from '../../../actions/patentTrackActions2'
+import useSafeState from '../../../hooks/useSafeState'
 
 const LoadLinkAssets = ({type, asset, size}) => {
     const dispatch = useDispatch()
@@ -23,19 +24,19 @@ const LoadLinkAssets = ({type, asset, size}) => {
     const [headerRowHeight, setHeaderRowHeight] = useState(47)
     const [width, setWidth] = useState(1800)
     const [currentSelection, setCurrentSelection] = useState(null)    
-    const [sheetUrl, setSheetUrl] = useState(null)    
+    const [sheetUrl, setSheetUrl] = useSafeState(null)    
     const [editSheet, setEditSheet] = useState(false)
     const [callByAuthLogin, setCallByAuth] = useState(false)
     const [googleAuthLogin, setGoogleAuthLogin ] = useState( true )
-    const [loadingData, setLoadingData] = useState( false )
+    const [loadingData, setLoadingData] = useSafeState( false )
     const [selectedAsset, setSelectedAsset] = useState('')
-    const [rows, setRows] = useState([])
+    const [rows, setRows] = useSafeState([])
     const [selectedAll, setSelectAll] = useState(false)
-    const [selectItems, setSelectItems] = useState([])
+    const [selectItems, setSelectItems] = useSafeState([])
     const [selectedRow, setSelectedRow] = useState([])
-    const [selectedItemsWithScore, setSelectedItemsWithScore] = useState([])
+    const [selectedItemsWithScore, setSelectedItemsWithScore] = useSafeState([])
     const [ dropOpenScoring, setDropOpenScoring ] = useState(null)
-	const [ movedProducts, setMovedProducts] = useState([])  
+	const [ movedProducts, setMovedProducts] = useSafeState([])  
     const google_auth_token = useSelector(state => state.patenTrack2.google_auth_token)
     const google_profile = useSelector(state => state.patenTrack2.google_profile)
     const selectedAssetsPatents = useSelector( state => state.patenTrack2.selectedAssetsPatents  )

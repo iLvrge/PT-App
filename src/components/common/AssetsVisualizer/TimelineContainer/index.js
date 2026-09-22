@@ -35,6 +35,7 @@ import { setTimelineSelectedItem, setTimelineSelectedAsset } from '../../../../a
 import clsx from 'clsx';
 import { IconButton } from '@mui/material';
 import { getShareCodeFromLocation, updateHashLocation } from '../../../../utils/hashLocation';
+import useSafeState from '../../../../hooks/useSafeState'
  
 
 /**
@@ -122,13 +123,13 @@ const TimelineContainer = ({ data, assignmentBar, assignmentBarToggle, type, tim
   
 
   const [ timelineRemoveRelease, setTimelineRemoveRelease ] = useState(false)
-  const [ timelineRawData, setTimelineRawData ] = useState([]) 
+  const [ timelineRawData, setTimelineRawData ] = useSafeState([]) 
   const [ timelineItems, setTimelineItems ] = useState([])
-  const [ timelineGroups, setTimelineRawGroups] = useState([])
+  const [ timelineGroups, setTimelineRawGroups] = useSafeState([])
   const [ tooltipItem, setToolTipItem] = useState([])
   const [ timeInterval, setTimeInterval] = useState(null)
 
-  const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useState(false)
+  const [ isLoadingTimelineData, setIsLoadingTimelineData ] = useSafeState(false)
   const [ isLoadingTimelineRawData, setIsLoadingTimelineRawData ] = useState(false)
   const search_string = useSelector(state => state.patenTrack2.search_string)
   const search_rf_id = useSelector(state => state.patenTrack2.search_rf_id)

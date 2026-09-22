@@ -90,13 +90,13 @@
 .pt-quill-root.ql-snow .ql-picker, .pt-quill-root .ql-toolbar, .pt-quill-root .ql-container, .pt-quill-root #toolbar, .pt-quill-root .ql-picker-label, .pt-quill-root .ql-picker-label svg, .pt-quill-root .ql-snow.ql-toolbar button, .pt-quill-root .ql-snow .ql-toolbar button, .pt-quill-root .ql-snow.ql-toolbar button svg, .pt-quill-root .ql-snow .ql-toolbar button svg, .pt-quill-root .ql-snow .ql-stroke, .pt-quill-root .ql-picker-label, .pt-quill-root #toolbar button, .pt-quill-root #toolbar button svg {
   color: var(--pt-action-active);
   stroke: var(--pt-action-active);
-  fill: var(--pt-action-disabled)Background;
+  fill: var(--pt-action-disabled-background);
 }
 
 .pt-quill-root.ql-snow .ql-stroke, .pt-quill-root .ql-snow button.ql-bold, .pt-quill-root .ql-snow button.ql-italic, .pt-quill-root .ql-snow button.ql-atButton, .pt-quill-root .ql-snow button.ql-atButton svg, .pt-quill-root .ql-snow button.ql-attachButton, .pt-quill-root .ql-snow button.ql-attachButton svg, .pt-quill-root .ql-snow button.ql-saveButton, .pt-quill-root .ql-snow button.ql-saveButton svg, .pt-quill-root .ql-snow button.ql-sendattachButton svg, .pt-quill-root #toolbar button svg {
-  stroke: var(--pt-action-disabled)Background;
-  color: var(--pt-action-disabled)Background;
-  fill: var(--pt-action-disabled)Background;
+  stroke: var(--pt-action-disabled-background);
+  color: var(--pt-action-disabled-background);
+  fill: var(--pt-action-disabled-background);
   pointer-events: none;
 }
 

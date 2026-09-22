@@ -50,6 +50,7 @@ import { Box } from '@mui/system'
 import Fees from '../LegalEventsContainer/Fees'
 import { getSlackToken, getTokenStorage } from '../../../../utils/tokenStorage'
 import GraphProduct from './GraphProduct'
+import useSafeState from '../../../../hooks/useSafeState'
 
 var newRange = [1,2]
 
@@ -64,10 +65,10 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const items = useRef(new DataSet())
     const dashboardScope = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     const [offsetWithLimit, setOffsetWithLimit] = useState([0, DEFAULT_CUSTOMERS_LIMIT])
-    const [ isLoadingCharts, setIsLoadingCharts ] = useState(false)
-    const [ loadingProduct, setLoadingProducts ] = useState(false)
+    const [ isLoadingCharts, setIsLoadingCharts ] = useSafeState(false)
+    const [ loadingProduct, setLoadingProducts ] = useSafeState(false)
     const [ openModal, setModalOpen ] = useState(false)
-    const [ assetLoading, setAssetsLoading ] = useState(false)
+    const [ assetLoading, setAssetsLoading ] = useSafeState(false)
     const [ openProductCategoryFilter, setProductCategoryFilter ] = useState(false)       
     const [ openFilter, setOpenFilter ] = useState(false)       
     const [ showContainer, setShowContainer ] = useState(true)
@@ -75,27 +76,27 @@ const InventionVisualizer = ({ defaultSize, visualizerBarSize, analyticsBar, ope
     const [ anchorEl, setAnchorEl ] = useState(null)
     const [ sliderValue, setSliderValue ] = useState(50)
     const [ abandonedTimeline, setAbandonedTimeline ] = useState([])
-    const [ assets, setAssets ] = useState([])
+    const [ assets, setAssets ] = useSafeState([])
     const [ filterList, setFilterList ] = useState([])
     const [ filterTotal, setFilterTotal ] = useState(0)
-    const [ filterYear, setFilterYear ] = useState([])
+    const [ filterYear, setFilterYear ] = useSafeState([])
     const [ selectedTab, setSelectedTab ] = useState(0)
     const [ selectedTabName, setSelectedTabName ] = useState('')
-    const [ graphRawData, setGraphRawData ] = useState([])
-    const [ salesData, setSalesData ] = useState([])
-    const [ productItems, setProductItems ] = useState([])  
-    const [ productGroups, setProductGroups ] = useState([])  
-    const [ graphRawGroupData, setGraphRawGroupData ] = useState([])  
+    const [ graphRawData, setGraphRawData ] = useSafeState([])
+    const [ salesData, setSalesData ] = useSafeState([])
+    const [ productItems, setProductItems ] = useSafeState([])  
+    const [ productGroups, setProductGroups ] = useSafeState([])  
+    const [ graphRawGroupData, setGraphRawGroupData ] = useSafeState([])  
     const [ resizableWidthHeight, setResizableWidthHeight ] = useState([665, 350])
     const [ filterDrag, setFilterDrag ] =  useState([0, 0])
-    const [ valueYear, setValueYear ] = useState([1, 2])
+    const [ valueYear, setValueYear ] = useSafeState([1, 2])
     const dashboardScreen = useSelector(state => state.ui.dashboardScreen)
     const [ xy, setXY] = useState({x: dashboardScreen === true ? '0px' : '-85px', y: '35px'})
-    const [ valueScope, setValueScope ] = useState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
-    const [ valueScopeLabel, setValueScopeLabel ] = useState([])
-    const [ valueRange, setValueRange ] = useState(3)/**dashboardScreen === true ? 4 : 3 */
+    const [ valueScope, setValueScope ] = useSafeState(dashboardScreen === true ? [...dashboardScope] : [1, 2])
+    const [ valueScopeLabel, setValueScopeLabel ] = useSafeState([])
+    const [ valueRange, setValueRange ] = useSafeState(3)/**dashboardScreen === true ? 4 : 3 */
     const [ preValueRange, setPreValueRange ] = useState(3)
-    const [ scopeRange, setScopeRange ] = useState([])
+    const [ scopeRange, setScopeRange ] = useSafeState([])
     const [ depthRange, setDepthRange ] = useState([
         {
             value: 1,

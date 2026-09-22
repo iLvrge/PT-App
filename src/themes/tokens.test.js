@@ -47,6 +47,13 @@ describe('theme tokens', () => {
       'text-secondary': 'rgba(0, 0, 0, 0.6)',
       'action-hover': 'rgba(0, 0, 0, 0.04)',
       'action-active': 'rgba(0, 0, 0, 0.54)',
+      // The extraction rewrote theme.palette.action.disabledBackground as
+      // `var(--pt-action-disabled)Background`: a prefix match that stranded the
+      // rest of the name outside the parenthesis, making the declaration
+      // invalid, so the browser dropped it. The message composer's icons lost
+      // the tint that shows they do nothing until a channel is picked. MUI's
+      // own default, which is what master renders.
+      'action-disabled-background': 'rgba(0, 0, 0, 0.12)',
     },
     dark: {
       'text-disabled': 'rgba(255, 255, 255, 0.5)',
@@ -54,6 +61,7 @@ describe('theme tokens', () => {
       'text-secondary': 'rgba(255, 255, 255, 0.7)',
       'action-hover': 'rgba(255, 255, 255, 0.08)',
       'action-active': '#ffffff',
+      'action-disabled-background': 'rgba(255, 255, 255, 0.12)',
     },
   }
 

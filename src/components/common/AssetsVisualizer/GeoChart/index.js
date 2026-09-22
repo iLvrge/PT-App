@@ -15,16 +15,17 @@ import AgentsVisualizer from '../AgentsVisualizer'
 import SankeyChart from '../SankeyChart' 
 import LabelWithIcon from '../../LabelWithIcon' 
 import clsx from 'clsx'
+import useSafeState from '../../../../hooks/useSafeState'
 
 const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openCustomerBar, tab, titleBar, disableOtherTabs, activeTab }) => {
     const containerRef = useRef(null)
     const dispatch = useDispatch()
     const [ fullScreen, setFullScreen ] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useSafeState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const [selectedTab, setSelectedTab ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? 0 : typeof activeTab != 'undefined' ? activeTab : 1)
     const [chartTabs, setChartTabs ] = useState(typeof disableOtherTabs != 'undefined' && disableOtherTabs === true ? ['Jurisdictions'] :  ['Innovations', 'Jurisdictions', 'Invented', 'Acquired', 'Filling', 'Assignments'])
-    const [data, setData] = useState([])
+    const [data, setData] = useSafeState([])
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
     const selectedCategory = useSelector(state => state.patenTrack2.selectedCategory);
@@ -370,7 +371,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                 {
                     typeof disableOtherTabs !== 'undefined' && disableOtherTabs === true 
                     ?
-                        <DisplayChart />
+                        DisplayChart()
                         :
                             selectedTab === 0 
                             ?
@@ -384,7 +385,7 @@ const GeoChart = ({ chartBar, analyticsBar, visualizerBarSize, standalone, openC
                             :
                                 selectedTab === 1
                                 ?
-                                    <DisplayChart />
+                                    DisplayChart()
                                 :
                                     selectedTab === 2
                                     ?

@@ -34,6 +34,7 @@ import { useIsMounted } from '../../../utils/useIsMounted'
 import SankeyChart from '../AssetsVisualizer/SankeyChart'
 import LegalData from '../AssetsVisualizer/FamilyContainer/LegalData'
 import TimelineWithLogo from '../AssetsVisualizer/TimelineWithLogo'
+import useSafeState from '../../../hooks/useSafeState'
 
 const IllustrationCommentContainer = ({ 
     cls, 
@@ -86,23 +87,23 @@ const IllustrationCommentContainer = ({
     const isMounted = useIsMounted()
     const [ containerSize, setContainerSize] = useState(0)
     const [ dashboardFullScreen, setDashboardFullScreen ] = useState( false ) 
-    const [ commentButtonVisible, setCommentButtonVisible ] = useState(false)
+    const [ commentButtonVisible, setCommentButtonVisible ] = useSafeState(false)
     const [ isDrag, setIsDrag ] = useState(false)
     const [ templateURL, setTemplateURL] = useState('about:blank')
-    const [ isFullscreenOpen, setIsFullscreenOpen ] = useState(false)
+    const [ isFullscreenOpen, setIsFullscreenOpen ] = useSafeState(false)
     const [ assetsCommentsTimelineMinimized, setAssetsCommentsTimelineMinimized ] = useState(false)
     const [ menuComponent, setMenuComponent ] = useState([])
     const [ dashboardData, setDashboardData ] = useState([])
     const [ dashboardTimelineData, setDashboardTimelineData ] = useState([])
     const [ timelineRawData, setTimelineRawData ] = useState([])
-    const [ allAssetsEvents, setAllAssetsEvents ] = useState([])
-    const [lineGraph, setLineGraph] = useState(false)
-    const [gauge, setGauge] = useState(false)
-    const [jurisdictions, setJurisdiction] = useState(false)
-    const [invention, setInvention] = useState(false)
-    const [sankey, setSankey] = useState(false)
-    const [kpi, setKpi] = useState(true)
-    const [timeline, setTimeline] = useState(false)
+    const [ allAssetsEvents, setAllAssetsEvents ] = useSafeState([])
+    const [lineGraph, setLineGraph] = useSafeState(false)
+    const [gauge, setGauge] = useSafeState(false)
+    const [jurisdictions, setJurisdiction] = useSafeState(false)
+    const [invention, setInvention] = useSafeState(false)
+    const [sankey, setSankey] = useSafeState(false)
+    const [kpi, setKpi] = useSafeState(true)
+    const [timeline, setTimeline] = useSafeState(false)
     const [showManualComponent, setShowManualComponent ] = useState(false)
     const assetIllustration = useSelector(state => state.patenTrack2.assetIllustration)
     const selectedMaintainencePatents = useSelector(state => state.patenTrack2.selectedMaintainencePatents)

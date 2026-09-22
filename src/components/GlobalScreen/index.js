@@ -72,7 +72,7 @@ import FamilyContainer from '../common/AssetsVisualizer/FamilyContainer';
 import SecuredAssets from '../common/SecuredAssets';
 import FullScreen from '../common/FullScreen';
 import { useReloadLayout } from '../../utils/useReloadLayout';
-import { set } from 'lodash';
+import set from 'lodash/set';
 import { getShareCodeFromLocation } from '../../utils/hashLocation';
 
 const GlobalScreen = ({

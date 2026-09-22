@@ -1,7 +1,9 @@
 import * as types from './actionTypes2'
 import PatenTrackApi, { DEFAULT_CUSTOMERS_LIMIT, DEFAULT_TRANSACTIONS_LIMIT, DEFAULT_PATENTS_LIMIT } from '../api/patenTrack2'
+import { queryClient, ASSET_LIST_STALE_TIME, ASSET_LIST_CACHE_TIME } from '../lib/queryClient'
+import { queryKeys } from '../queries/keys'
 
-import { 
+import {
   toggleLifeSpanMode, 
   setDriveTemplateFrameMode, 
   setDriveTemplateMode, 
@@ -1211,6 +1213,18 @@ export const getForeignAssetsBySheet = ( form ) => {
  * @param {*} append 
  */
 
+/**
+ * Drops every cached asset-grid response.
+ *
+ * The grid is cached for an hour, which is right for browsing and wrong
+ * immediately after something changes what the grid should show - recording an
+ * asset, listing one for sale, moving one between layouts. Call this after any
+ * such change, or the user sees their own edit missing for up to an hour and
+ * concludes it did not save.
+ */
+export const invalidateCustomerAssets = () =>
+  queryClient.invalidateQueries({ queryKey: queryKeys.layoutAssetsRoot() })
+
 export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, append = false, startIndex, endIndex, column, direction, assetTableScrollPosition, salesAssets = false, lawyers=[], callBackFn ) => {
   return async dispatch => {
     if(append === false) {
@@ -1218,7 +1232,35 @@ export const getCustomerAssets = ( type, companies, tabs, customers, rfIDs, appe
     }
     //PatenTrackApi.cancelAssetsRequest()
     /*const { data } = await PatenTrackApi.getCustomerAssets( type, companies, type == 'due_dilligence' ? tabs : [], type == 'due_dilligence' ? customers : [], rfIDs, startIndex, endIndex, column, direction, salesAssets )    */
-    const { data } = await PatenTrackApi.getCustomerAssets( type, companies, tabs, customers, rfIDs, startIndex, endIndex, column, direction, salesAssets, lawyers )
+
+    /*
+     * Served from the query cache for an hour. This is the most expensive
+     * request the app makes and the grid barely changes within a session, so
+     * revisiting a layout should not pay for it again.
+     *
+     * fetchQuery rather than useQuery because the result goes into Redux, which
+     * the grid reads - there is no component subscribing to the query. It also
+     * de-duplicates: two panes asking for the same selection at once share one
+     * in-flight request instead of racing.
+     *
+     * Only the response body is cached. Everything below still dispatches on
+     * every call, so a cache hit updates Redux exactly as a fresh fetch does.
+     */
+    const data = await queryClient.fetchQuery({
+      queryKey: queryKeys.layoutAssets({
+        type, companies, tabs, customers, rfIDs,
+        startIndex, endIndex, column, direction, salesAssets, lawyers,
+      }),
+      queryFn: async () => {
+        const response = await PatenTrackApi.getCustomerAssets(
+          type, companies, tabs, customers, rfIDs,
+          startIndex, endIndex, column, direction, salesAssets, lawyers
+        )
+        return response.data
+      },
+      staleTime: ASSET_LIST_STALE_TIME,
+      cacheTime: ASSET_LIST_CACHE_TIME,
+    })
     dispatch( setAssetTypeAssignmentAllAssets(data, append) )
     if(data != null && typeof data.other_data != 'undefined') {
       dispatch(setPtabData(data.other_data))

@@ -48,7 +48,16 @@ for (const file of cssFiles) {
   }
 }
 
-const jsFiles = cp.execSync('find src -name "*.js" -o -name "*.jsx"', { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+// Tests are excluded: they assert about class names but never render them, so
+// a test that merely names one is not a component competing for it. Leaving
+// them in also mislabels a test as an owner of whatever stylesheet sits beside
+// it - a test in src/styles/ shares a folder with tailwind.css AND
+// theme.generated.css, so one string containing "dark" was enough to make
+// `.dark` look contested between two sheets no component actually fights over.
+const jsFiles = cp
+  .execSync('find src -name "*.js" -o -name "*.jsx"', { encoding: 'utf8' })
+  .trim().split('\n').filter(Boolean)
+  .filter((f) => !/\.(test|spec)\.jsx?$/.test(f));
 const sources = jsFiles.map((f) => ({ file: f, text: fs.readFileSync(f, 'utf8') }));
 
 /** Which stylesheet does this component file pull in, directly or via its folder? */

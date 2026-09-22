@@ -9,13 +9,14 @@ import PatenTrackApi from '../../../../api/patenTrack2'
 import themeMode from '../../../../themes/themeMode';
 import { setLineChartData, setLineChartRequest } from '../../../../actions/patentTrackActions2';
 import { Box } from '@mui/system';
+import useSafeState from '../../../../hooks/useSafeState'
 
 const AgentsVisualizer = (props) => { 
     const containerRef = useRef(null)
     const dispatch = useDispatch()
-    const [data, setData] = useState([]) 
-    const [rawData, setRawData] = useState([]) 
-    const [loading, setLoading] = useState(false)
+    const [data, setData] = useSafeState([]) 
+    const [rawData, setRawData] = useSafeState([]) 
+    const [loading, setLoading] = useSafeState(false)
     const [assetRequest, setAssetRequest] = useState(false)
     const isDarkTheme = useSelector(state => state.ui.isDarkTheme);
     const auth_token = useSelector(state => state.patenTrack2.auth_token)
@@ -312,7 +313,7 @@ const AgentsVisualizer = (props) => {
                 )
             } 
    */}          <div className={"flex h-[86%] flex-1 items-start justify-center p-2.5 text-sm [&_div[id*=googlechart-control-]]:absolute [&_div[id*=googlechart-control-]]:top-[200px] [&_div[id*=googlechart-control-]]:z-[9999]"} ref={containerRef}> 
-                <DisplayChart />
+                {DisplayChart()}
             </div>
         </Paper>
     )

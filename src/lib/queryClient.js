@@ -12,6 +12,21 @@ import { QueryClient } from '@tanstack/react-query'
  * useSyncExternalStore, and this app is on React 17. Moving to v5 is part of the
  * React 18 upgrade, not separable from it.
  */
+/**
+ * The asset grid barely changes within a session and is the most expensive
+ * request the app makes, so it is held for an hour.
+ *
+ * cacheTime has to be raised alongside staleTime - they are different clocks.
+ * staleTime is how long the data is served without refetching; cacheTime is how
+ * long an entry survives with nothing observing it. Left at the 5-minute
+ * default, the entry would be garbage-collected long before the hour was up and
+ * the next visit would refetch regardless: the cache would look configured and
+ * do nothing. It matters especially here because these are fetched with
+ * fetchQuery, which registers no observer at all.
+ */
+export const ASSET_LIST_STALE_TIME = 60 * 60_000
+export const ASSET_LIST_CACHE_TIME = 60 * 60_000
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

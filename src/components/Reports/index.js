@@ -35,6 +35,7 @@ import InventionVisualizer from '../common/AssetsVisualizer/InventionVisualizer'
 import SankeyChart from './SankeyChart'
 import AddToolTip from './AddToolTip'
 import { useIsMounted } from '../../utils/useIsMounted'
+import useSafeState from '../../hooks/useSafeState'
 
 const Reports = (props) => {
     let LIST = [
@@ -570,16 +571,16 @@ const Reports = (props) => {
     const DATE_FORMAT = 'MMM DD, YYYY'
     const ref = useRef();
     let resizeObserver = null
-    const [loading, setLoading] = useState(false)    
-    const [enableStep, setEnableStep] = useState(false)       
-    const [timeLineLoading, setTimeLineLoading] = useState(false)    
+    const [loading, setLoading] = useSafeState(false)    
+    const [enableStep, setEnableStep] = useSafeState(false)       
+    const [timeLineLoading, setTimeLineLoading] = useSafeState(false)    
     const [timelineGrid, setTimelineGrid] = useState(TIMELINE_ITEM)
     const [grid, setGrid] = useState(GRID_ITEM)
     const [smallScreen, setSmallScreen] = useState(false)
     const [activeId, setActiveId] = useState(-1)
     const profile = useSelector(state => (state.patenTrack.profile))    
-    const [cardList, setCardList] = useState([])
-    const [timelineList, setTimelineList] = useState(/* profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : */ TIMELINE_LIST) 
+    const [cardList, setCardList] = useSafeState([])
+    const [timelineList, setTimelineList] = useSafeState(/* profile?.user?.organisation?.organisation_type && profile.user.organisation.organisation_type.toString().toLowerCase() == 'bank'? BANK_TIMELINE_LIST : */ TIMELINE_LIST) 
     const viewDashboard = useSelector(state => state.ui.viewDashboard)
     const viewInitial = useSelector(state => state.ui.viewInitial)
     const viewIntro = useSelector(state => state.ui.viewIntro)

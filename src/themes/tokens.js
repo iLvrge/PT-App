@@ -20,6 +20,10 @@ const tokens = {
     'action-hover': 'rgba(0, 0, 0, 0.04)',
     'action-active': 'rgba(0, 0, 0, 0.54)',
     'action-disabled': 'rgba(0, 0, 0, 0.26)',
+    // MUI's action.disabledBackground. Distinct from action-disabled and a good
+    // deal fainter; the message composer's icons are tinted with it to show
+    // they do nothing until a channel is picked.
+    'action-disabled-background': 'rgba(0, 0, 0, 0.12)',
     divider: 'rgba(0, 0, 0, 0.12)',
     'secondary-main': '#E60000',
     'secondary-button-active': '#90CAF9',
@@ -35,6 +39,7 @@ const tokens = {
     'action-hover': 'rgba(255, 255, 255, 0.08)',
     'action-active': '#ffffff',
     'action-disabled': 'rgba(255, 255, 255, 0.3)',
+    'action-disabled-background': 'rgba(255, 255, 255, 0.12)',
     divider: 'rgba(255, 255, 255, 0.12)',
     'secondary-main': '#E60000',
     'secondary-button-active': '#90CAF9',

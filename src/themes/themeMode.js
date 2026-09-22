@@ -7,7 +7,10 @@ const build = (mode) => {
       mode,
       background: { default: t['bg-default'], paper: t['bg-paper'] },
       text: { primary: t['text-primary'], active: t['text-active'] },
-      action: { disabled: t['action-disabled'] },
+      action: {
+        disabled: t['action-disabled'],
+        disabledBackground: t['action-disabled-background'],
+      },
       divider: t.divider,
       secondary: { main: t['secondary-main'], buttonActive: t['secondary-button-active'] },
     },

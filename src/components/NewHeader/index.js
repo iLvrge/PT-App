@@ -127,8 +127,23 @@ import {
 } from '../../actions/uiActions'
 import Scheduling from './Scheduling'
 import ViewIcons from './ViewIcons'
-import SocialMediaConnect from '../common/SocialMediaConnect'
-import { stubTrue } from 'lodash'
+/*
+ * Lazy: SocialMediaConnect pulls in @azure/msal-browser and @azure/msal-common,
+ * about 200 kB that only matters once someone opens the Connect panel. NewHeader
+ * renders on every screen, so importing it eagerly put all of msal in the entry
+ * chunk and made every page pay for it.
+ *
+ * The shim keeps the `component:` reference below working unchanged, and owns
+ * its own Suspense boundary so the panel does not depend on an ancestor having
+ * one.
+ */
+const SocialMediaConnectLazy = lazyWithRetry(
+  () => import('../common/SocialMediaConnect'), 'SocialMediaConnect'
+)
+const SocialMediaConnect = (props) => (
+  <Suspense fallback={null}><SocialMediaConnectLazy {...props} /></Suspense>
+)
+import stubTrue from 'lodash/stubTrue'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShareAlt } from '@fortawesome/free-solid-svg-icons'
 import { copyToClipboard } from '../../utils/html_encode_decode'

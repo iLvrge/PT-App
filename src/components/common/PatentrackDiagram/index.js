@@ -9,7 +9,7 @@ import PatentTopTitle from './PatentTopTitle';
 import React, { createRef } from 'react';
 import ReactDOM from 'react-dom';
 import config from './config.json';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { Box } from '@mui/material';
 import TitleBar from '../TitleBar';
 
