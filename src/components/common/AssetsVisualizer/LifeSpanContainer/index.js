@@ -330,9 +330,10 @@ const LifeSpanContainer = ({chartBar, analyticsBar, openCustomerBar, visualizerB
                                             assets={assetIllustration}
                                         />
                                 :
-                                selectedAssetsTransactionLifeSpan.length > 0 && (
-                                    <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
-                                )
+                                // Rendered even when the list is empty: the chart
+                                // shows its own "no data" message rather than a
+                                // blank panel that reads as broken.
+                                <SpanVisualize chart={selectedAssetsTransactionLifeSpan} chartBar={chartBar} visualizerBarSize={visualizerBarSize}/>
                     :
                         selectedRow.length == 0
                         ?

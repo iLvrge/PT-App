@@ -156,8 +156,32 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
     }, [height, containerRef])
 
 
+    /*
+     * A table is a header row plus at least one data row. Anything less used
+     * to be handed to Google Charts, which answers with its own red
+     * "Cannot draw chart: no data specified" box - one per render, so the
+     * panel filled with them. Both that case and a chart-side error now
+     * show the panel's own message in the app's colours.
+     */
+    const [chartError, setChartError] = useState(null)
+    useEffect(() => { setChartError(null) }, [chart]) // a new table gets a fresh try
+    const hasRows = Array.isArray(chart) && chart.length > 1
+
     const DisplayChart = () => {
-        if(chart.length === 0) return null
+        if (!hasRows || chartError) {
+            return (
+                <div className={'pt-lifespan-empty'} role="status">
+                    <span className={'pt-lifespan-empty-title'}>
+                        {chartError ? 'The lifespan chart could not be drawn.' : 'No lifespan data for this selection.'}
+                    </span>
+                    <span className={'pt-lifespan-empty-hint'}>
+                        {chartError
+                            ? 'Try selecting the assets again. If it keeps happening, let us know.'
+                            : 'Assets need a filing or grant date to appear here.'}
+                    </span>
+                </div>
+            )
+        }
         return (
             <div style={{marginTop: 15, display: 'flex', height: '93%', width: '100%'}}>
                 <Chart
@@ -167,8 +191,9 @@ const SpanVisualize = ({ chart, chartBar, visualizerBarSize, standalone }) => {
                     loader={<div>Loading...</div>}
                     data={chart}
                     options={option}
+                    chartEvents={[{ eventName: 'error', callback: ({ chartWrapper }) => setChartError(chartWrapper) }]}
                 />
-            </div> 
+            </div>
         )
     }
 

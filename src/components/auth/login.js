@@ -48,7 +48,14 @@ function Login(props) {
       {
         login 
         ?
-        <div>
+        // A form, so Enter in either field signs in; the fields used to sit
+        // in a plain div and only the button's click reached onSignIn.
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (username.length > 0 && password.length > 0) onSignIn()
+          }}
+        >
           <TextField
           id          = {'username'}
           value       = {username}
@@ -88,7 +95,7 @@ function Login(props) {
             disabled  = {
               username.length === 0 || password.length === 0
             }
-            onClick   = {onSignIn}
+            type      = "submit"
           >
             Login
           </Button>
@@ -104,7 +111,7 @@ function Login(props) {
             Forget Password
           </Button>
         </div>
-        </div>
+        </form>
         :
         <div>
           {

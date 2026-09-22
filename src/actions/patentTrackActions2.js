@@ -163,29 +163,41 @@ export const setAssetsTransactionsLifeSpan = (assetType, companyId, customerId, 
 }
 
 
-export const getAssetsAllTransactionsEvents = (type, companies, tabs, customers, rfIDs) => {
-  return async dispatch => {
-    const { data } = await PatenTrackApi.getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs)
-    dispatch(toggleLifeSpanMode(true))
-    dispatch(setAssetsTransactionsLifeSpan(type, companies, tabs, customers, data))
+/*
+ * The lifespan chart is fed straight from these responses. Anything that is
+ * not a chart table - an error body, a 429 from the rate limiter, a request
+ * that never answered - used to reach the chart as-is, and Google Charts
+ * painted its own red "Cannot draw chart" box for every render. The chart
+ * gets a table or an empty list, nothing else; the failure is logged once.
+ */
+const lifeSpanTable = (data) => (Array.isArray(data) ? data : [])
+
+const loadLifeSpan = (dispatch, tag, request) => async () => {
+  let table = []
+  try {
+    const { data } = await request()
+    table = lifeSpanTable(data)
+  } catch (err) {
+    console.warn('lifespan unavailable:', err?.message)
   }
+  dispatch(toggleLifeSpanMode(true))
+  dispatch(setAssetsTransactionsLifeSpan(...tag, table))
+}
+
+export const getAssetsAllTransactionsEvents = (type, companies, tabs, customers, rfIDs) => {
+  return dispatch => loadLifeSpan(dispatch, [type, companies, tabs, customers],
+    () => PatenTrackApi.getAllAssetsTransactionsEvents(type, companies, tabs, customers, rfIDs))()
 }
 
 
 export const getAssetsTransactionsEvents = (assetType, companyId, customerId, transactionId) => {
-  return async dispatch => {
-    const { data } = await PatenTrackApi.getAssetsTransactionsEvents(assetType, companyId, customerId, transactionId)
-    dispatch(toggleLifeSpanMode(true))
-    dispatch(setAssetsTransactionsLifeSpan(assetType, companyId, customerId, transactionId, data))
-  }
-}   
+  return dispatch => loadLifeSpan(dispatch, [assetType, companyId, customerId, transactionId],
+    () => PatenTrackApi.getAssetsTransactionsEvents(assetType, companyId, customerId, transactionId))()
+}
 
 export const getAssetsByTransactionsEvents = (transactionId) => {
-  return async dispatch => {
-    const { data } = await PatenTrackApi.getAssetsByTransactionsEvents(transactionId)
-    dispatch(toggleLifeSpanMode(true))
-    dispatch(setAssetsTransactionsLifeSpan(null, 0, 0, transactionId, data))
-  }
+  return dispatch => loadLifeSpan(dispatch, [null, 0, 0, transactionId],
+    () => PatenTrackApi.getAssetsByTransactionsEvents(transactionId))()
 }
 
 
