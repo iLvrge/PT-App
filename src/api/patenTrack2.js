@@ -67,6 +67,45 @@ const getHeaderWithCancelToken = (referenceVariable) => {
   return header
 }
 
+/*
+ * Share one call between callers that ask for exactly the same thing at the
+ * same time.
+ *
+ * A screen like InventionVisualizer has several effects whose dependency lists
+ * overlap, so one state change commits two of them and each asks for the same
+ * classification breakdown. Measured on a single Avaya page load: three POSTs
+ * to /assets/cpc, two of them byte-identical, all three in flight together
+ * against the same connection pool - 30.7 s for the slowest, where one on its
+ * own takes about five. Whoever asks first makes the call; anyone asking for
+ * the identical payload while it is still open gets that same promise.
+ *
+ * Only identical payloads are shared, so no caller ever sees another caller's
+ * data, and the entry is dropped the moment the call settles - this is request
+ * coalescing, not a cache, so a later request always goes to the server.
+ */
+const inFlight = new Map()
+
+const formSignature = (form) => {
+  const parts = []
+  form.forEach((value, key) => {
+    parts.push(`${key}=${typeof value === 'string' ? value : '[binary]'}`)
+  })
+  return parts.sort().join('\u0000')
+}
+
+const coalesce = (name, form, send) => {
+  const key = `${name}\u0000${formSignature(form)}`
+  const running = inFlight.get(key)
+  if (running !== undefined) {
+    return running
+  }
+  const request = send().finally(() => {
+    inFlight.delete(key)
+  })
+  inFlight.set(key, request)
+  return request
+}
+
 var CancelToken = axios.CancelToken
 
 var cancel, cancelCPC, cancelAssets, cancelLifeSpan, cancelTimeline,cancelTimelineSecurity, cancelTimelineItem, cancelInitiated, cancelRecords, cancelLink, cancelSummary, cancelAbstract, cancelFamily, cancelSpecifications, cancelClaims, cancelChildCompaniesRequest, cancelDownloadURL, cancelForeignAssetsSheet, cancelForeignAssetsBySheet, cancelForeignAssetTimeline, cancelGetRepoFolder, cancelCitationData, cancelAllAssetsCitationData, cancelPtab, cancelShareTimeline, cancelShareDashboard, cancelClaimsCounter, cancelFiguresCounter, cancelPtabCounter, cancelCitationCounter, cancelSatusCounter, cancelFamilyCounter, cancelFeesCounter, cancelAllDashboardTimelineRequest, cancelAllDashboardRequest, cancelAllDashboardCountRequest, cancelStatus, cancelAssetTypeAssignmentAllAssetsWithFamily, cancelDashboardPartiesData, cancelDashboardPartiesAssignorData, cancelAgentsData, cancelCollectionIllustration, cancelInventorGeoLocation, cancelAbandoned, cancelAllAbandonedAssetsYears, cancelAllAbandonedAssetsAges, cancelCategoryProduct;
@@ -407,12 +446,14 @@ class PatenTrackApi {
     } 
   }
   
-  static getAssetLifeSpan( form ) { 
-    let header = getFormUrlHeader()
-    header['cancelToken'] = new CancelToken(function executor(c) {
-      cancelLifeSpan = c
+  static getAssetLifeSpan( form ) {
+    return coalesce('events/assets', form, () => {
+      let header = getFormUrlHeader()
+      header['cancelToken'] = new CancelToken(function executor(c) {
+        cancelLifeSpan = c
+      })
+      return api.post(`${base_new_api_url}/events/assets`, form, header)
     })
-    return api.post(`${base_new_api_url}/events/assets`, form, header)
   }
 
   static cancelLifeSpanRequest() {
@@ -443,12 +484,14 @@ class PatenTrackApi {
     } 
   }
 
-  static getCPC( form ) { 
-    let header = getFormUrlHeader()
-    header['cancelToken'] = new CancelToken(function executor(c) {
-      cancelCPC = c
+  static getCPC( form ) {
+    return coalesce('assets/cpc', form, () => {
+      let header = getFormUrlHeader()
+      header['cancelToken'] = new CancelToken(function executor(c) {
+        cancelCPC = c
+      })
+      return api.post(`${base_new_api_url}/assets/cpc`, form, header)
     })
-    return api.post(`${base_new_api_url}/assets/cpc`, form, header)
   }
 
   static cancelCPCRequest() {
