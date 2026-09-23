@@ -1,6 +1,36 @@
 import React, { useState } from 'react'
 import { Button, Fade, TextField, Typography } from '@mui/material'
 import { withRouter } from 'react-router-dom'
+import { problemType, retryAfterSeconds } from '../../api/problem'
+
+/**
+ * What to tell someone whose sign-in failed.
+ *
+ * This screen used to say the credentials were wrong whatever had happened —
+ * including when the rate limiter had locked the address out, or the server
+ * was unreachable. People then retried a password that was fine, which on a
+ * locked-out address is the one thing that keeps it locked out.
+ */
+const signInMessage = (error) => {
+  if (!error) return ''
+  if (error.isNetworkError) {
+    return error.isOffline
+      ? 'You appear to be offline. Check your connection and try again.'
+      : 'Could not reach the server. Please try again in a moment.'
+  }
+  if (problemType(error) === 'rate-limited') {
+    const wait = retryAfterSeconds(error)
+    const minutes = wait ? Math.ceil(wait / 60) : null
+    return minutes
+      ? `Too many sign-in attempts. Try again in ${minutes} minute${minutes === 1 ? '' : 's'}.`
+      : 'Too many sign-in attempts. Please try again later.'
+  }
+  const status = error.response && error.response.status
+  if (status && status >= 500) {
+    return 'The server had a problem signing you in. Please try again.'
+  }
+  return 'Your username and password are not correct!'
+}
 
 function Login(props) {
   const [ username, setUsername ] = useState('')
@@ -41,7 +71,7 @@ function Login(props) {
           color     = "secondary"
           className = {"text-center"}
         >
-          Your username and password are not correct!
+          {signInMessage(error)}
         </Typography>
       </Fade>
       

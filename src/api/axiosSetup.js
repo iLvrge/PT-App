@@ -4,6 +4,7 @@ import getToken from './token'
 import history from '../history'
 import {removeTokenStorage, deleteCookie} from '../utils/tokenStorage'
 import { refreshMicrosoftToken } from '../components/AuthMicrosoft'
+import { problemMessage, problemType, problemFields, problemRequestId, retryAfterSeconds } from './problem'
 const api = axios.create({
     baseURL: base_new_api_url,
 });
@@ -12,6 +13,23 @@ api.interceptors.response.use(
     response => response,
     async (error) => {
         const originalRequest = error.config;
+
+        // Every failure the API returns is an RFC 7807 problem document. It is
+        // read once here so no caller has to know the body's shape: the
+        // message to show, the stable `type` to branch on, the field errors,
+        // and the request id worth quoting in a bug report. problem.js falls
+        // back to the older { error: { message } } envelope, so this build
+        // works against an API that has not taken the change yet.
+        if (error.response) {
+            error.problem = {
+                type: problemType(error),
+                message: problemMessage(error),
+                fields: problemFields(error),
+                requestId: problemRequestId(error),
+                status: error.response.status,
+                retryAfter: retryAfterSeconds(error),
+            }
+        }
         // The refresh call itself goes through this same interceptor. The API
         // answers a missing/invalid/expired token with 401 (never 403), so
         // without this guard a failed refresh re-entered this branch, tried to
@@ -23,7 +41,9 @@ api.interceptors.response.use(
 
         if (error.response && error.response.status === 401 && !originalRequest._retry && !isRefreshCall) {
             originalRequest._retry = true;
-            const errorMessage = error.response.data;
+            // Was comparing the response *body* — an object — against a
+            // string, so it never matched. Compare the message the API sent.
+            const errorMessage = error.problem ? error.problem.message : error.response.data;
             if(errorMessage == "Refresh microsoft token") {
                 try { 
                     const tokenString = localStorage.getItem('microsoft_auth_token_info');
@@ -85,7 +105,7 @@ api.interceptors.response.use(
         console.log('error.response', error)
         // Handle specific error messages for other status codes
         if (error.response && error.response.status === 403) {
-            const errorMessage = error.response.data  ;
+            const errorMessage = error.problem ? error.problem.message : error.response.data;
             if(errorMessage == 'Refresh token failed') {
                 removeTokenStorage('token') 
                 deleteCookie('token')
