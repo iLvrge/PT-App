@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
 import copy from 'copy-to-clipboard'
 import PatenTrackApi from '../../../api/patenTrack2'
 import { capitalize, numberWithCommas } from '../../../utils/numbers'
@@ -35,6 +36,19 @@ const CompanySummary = () => {
         }
     ]
     
+    /*
+     * Whether this component is still on screen.
+     *
+     * The summary request takes seconds — eight in one measured load — and this
+     * panel lives inside a Suspense boundary in the header, so it is routinely
+     * unmounted while that request is still in flight. Writing state afterwards
+     * is the "Can't perform a React state update on an unmounted component"
+     * warning, and it holds the whole component's closure alive until the
+     * request settles.
+     */
+    const mounted = useRef(true)
+    useEffect(() => () => { mounted.current = false }, [])
+
     const [companyData, setCompanyData] = useState([])
     const [headerColumns, setHeaderColumns] = useState(COLUMNS)
     const [ width, setWidth ] = useState( 200 )
@@ -90,7 +104,26 @@ const CompanySummary = () => {
 
     const getSummaryData = async(access_token, user_email) => {
         await PatenTrackApi.cancelSummaryRequest()
-        const { data } = await PatenTrackApi.getCompanySummary( access_token, user_email )
+
+        let data = null
+        try {
+            /*
+             * Wrapped because the call above cancels whatever was in flight, and
+             * a cancelled axios request rejects. That rejection belonged to the
+             * earlier invocation, which had nothing to catch it — every token
+             * change produced an unhandled rejection alongside the leak.
+             */
+            ;({ data } = await PatenTrackApi.getCompanySummary( access_token, user_email ))
+        } catch (error) {
+            // A cancel is this component's own doing and is not worth reporting.
+            if (!axios.isCancel(error)) {
+                console.warn('company summary unavailable:', error?.message)
+            }
+            return
+        }
+
+        if (!mounted.current) return
+
         if( data != null ) {
             let {report, reportActive} = data
             let summaryData = [];
